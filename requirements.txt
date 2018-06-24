@@ -3,3 +3,4 @@ six==1.10.0
 tensorflow==1.8.0
 bottle==0.12.13
 numpy==1.13.3
+gunicorn
