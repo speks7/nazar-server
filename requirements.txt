@@ -1,0 +1,16 @@
+backports.weakref==1.0.post1
+bleach
+bottle==0.12.13
+enum34==1.1.6
+funcsigs==1.0.2
+futures==3.1.1
+html5lib
+Markdown
+mock==2.0.0
+numpy
+pbr==3.1.1
+protobuf
+six==1.11.0
+tensorflow
+tensorflow-tensorboard
+Werkzeug
