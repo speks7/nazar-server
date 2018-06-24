@@ -1,18 +1,15 @@
-# Tensorflow-REST
-Tensorflow image classifier with a rest api ! (customisable)
+# nazar-server
+Tensorflow image classifier with a rest api server to fetch the response from the picture taken using Nazar Application
 
 ## Description
 
-This repository allow you to train dataset of image to classify external image with a pourcentage.
-Example you want to check if an image is a boat, you need to store some images of boat that are really a boat.
-Then train data and next you can execute a script with external image, this script will detext if the image is a boat or not.
+You can use the repository to train yaour dataset using the script and then use the classify.py file to classify the images.
 
 ## Installation 
 
-- First, you need to install python (https://www.python.org/downloads/)
-- You need to clone this repo `git clone https://github.com/AlexisVisco/tensorflow-image-rest/`
-- Then `cd tensorflow-image-rest`
-- Next you need to install all dependencies of this project hopefully just run this command `pip install -r requierments.txt`
+- You need to clone this repo `git clone https://github.com/aryaminus/nazar-server/`
+- Then `cd nazar-server`
+- Next you need to install all dependencies of this project hopefully just run this command `pip install -r requirements.txt`
 
 You are okay to execute python script now !
 
@@ -29,13 +26,13 @@ You should have something like that :
 ├── retrain.py
 ├── tf_files
 │   ├── data
-│   │   ├── boats
+│   │   ├── register
 │   │   │   ├── 00.jpeg
 │   │   │   ├── 01.jpeg
 │   │   │   ├── 02.jpeg
 │   │   │   ├── 03.jpeg
 │   │   │   ...
-│   │   └── wood
+│   │   └── capacitor
 │   │       ├── 00.jpeg
 │   │       ├── 01.jpeg
 │   │       ├── 02.jpeg
@@ -74,7 +71,7 @@ You will see something like that :
 ![](https://image.prntscr.com/image/za9C8v1cRIChS8UdzyOnug.png)
 And the end output is something like this :
 ```
-INFO:tensorflow:Final test accuracy = 100.0% (N=21)
+INFO:tensorflow:Final test accuracy = 92.31% (N=1000)
 INFO:tensorflow:Froze 2 variables.
 Converted 2 variables to const ops.
 ```
@@ -91,7 +88,7 @@ curl -POST -H "Content-type: application/json" -d
 '{
   "data": [{
     "ext" : "jpg",
-    "path" : "/home/images/local01.jpg",
+    "path" : "index.jpg",
     "type" : "local"
   }]
 }'
@@ -111,6 +108,3 @@ curl -POST -H "Content-type: application/json" -d
 }'
 'localhost:8989/classify_image/'
 ```
-
-Thanks you for reading and don't forget to star it !
-
