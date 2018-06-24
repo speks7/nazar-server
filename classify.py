@@ -156,4 +156,4 @@ def score(image_path):
 
 create_tmp('tmp')
 #run(host='127.0.0.1', port=8989, debug=True)
-run()
+run(host='0.0.0.0', port=os.environ.get('PORT', 8080))

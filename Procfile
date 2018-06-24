@@ -1,1 +1,1 @@
-web: python classify.py
+web: python classify.py runserver $PORT
