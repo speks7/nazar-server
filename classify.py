@@ -147,4 +147,5 @@ def score(image_path):
     return data
 
 create_tmp('tmp')
-run(host='127.0.0.1', port=8989, debug=True)
+#run(host='127.0.0.1', port=8989, debug=True)
+run(debug=True)
