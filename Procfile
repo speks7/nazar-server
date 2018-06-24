@@ -1,1 +1,1 @@
-web: gunicorn classify.py $PORT
+web: python classify.py
