@@ -2,14 +2,17 @@ from bottle import request, response, route, run
 import tensorflow as tf
 import sys, os, errno, urllib, uuid
 import numpy as np
+from flask import Flask
 
 WORKING_DIRECTORY = "tf_files"
 TMP_DIRECTORY = "tmp"
 TRAINED_LABELS = "%s/retrained_labels.txt" % (WORKING_DIRECTORY)
 RETRAINED_GRAPH = "%s/retrained_graph.pb" % (WORKING_DIRECTORY)
 
-@route('/classify_image/', method='POST')
-def hello():
+app = Flask(__name__)
+
+@app.route('/classify_image/', method='POST')
+def index():
     json = {}
     print(request.json['data'])
     for info in request.json['data']:
@@ -148,4 +151,5 @@ def score(image_path):
 
 create_tmp('tmp')
 #run(host='127.0.0.1', port=8989, debug=True)
-run(debug=True)
+if __name__ == '__main__':
+    app.run(debug = True)
