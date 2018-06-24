@@ -27,10 +27,14 @@ def index():
     return json
 
 
+
 @route('/status/', method='GET')
 def status():
     return 'online'
 
+@route('/', method='GET')
+def getHome():
+    return status()
 
 def download_image(url, extension):
     filename = TMP_DIRECTORY + '/' + uuid.uuid4().hex + extension
