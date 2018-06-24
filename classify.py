@@ -2,6 +2,7 @@ from bottle import request, response, route, run
 import tensorflow as tf
 import sys, os, errno, urllib, uuid
 import numpy as np
+import urllib.request
 from flask import Flask
 
 WORKING_DIRECTORY = "tf_files"
@@ -11,7 +12,7 @@ RETRAINED_GRAPH = "%s/retrained_graph.pb" % (WORKING_DIRECTORY)
 
 app = Flask(__name__)
 
-@app.route('/classify_image/', method='POST')
+@route('/classify_image/', method='POST')
 def index():
     json = {}
     print(request.json['data'])
@@ -33,7 +34,7 @@ def status():
 
 def download_image(url, extension):
     filename = TMP_DIRECTORY + '/' + uuid.uuid4().hex + extension
-    urllib.urlretrieve(url, filename)
+    urllib.request.urlretrieve(url, filename)
     return filename
 
 def create_tmp(path):
@@ -152,4 +153,4 @@ def score(image_path):
 create_tmp('tmp')
 #run(host='127.0.0.1', port=8989, debug=True)
 if __name__ == '__main__':
-    app.run(debug = True)
+    run(debug = True)
