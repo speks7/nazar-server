@@ -14,6 +14,7 @@ RETRAINED_GRAPH = "%s/retrained_graph.pb" % (WORKING_DIRECTORY)
 
 @route('/classify_image/', method='POST')
 def index():
+    response.content_type='application/json'
     json = {}
     print(request.json['data'])
     for info in request.json['data']:
@@ -24,7 +25,7 @@ def index():
             json[info['path']] = score(path)
             os.remove(path)
         print(json)
-    return json
+    return str(json)
 
 
 
