@@ -3,6 +3,7 @@ import tensorflow as tf
 import sys, os, errno, urllib, uuid
 import numpy as np
 import urllib.request
+import base64
 #from flask import Flask
 
 WORKING_DIRECTORY = "tf_files"
@@ -35,11 +36,12 @@ def index():
     print(request.json['data'])
     for info in request.json['data']:
         if (info['type'] == 'local'):
-            json[info['path']] = score(info['path'])
+            path = save_image(info['path'], info['ext'])
+            #json[info['path']] = score(info['path'])
         else:
             path = download_image(info['path'], info['ext'])
-            json[info['path']] = score(path)
-            os.remove(path)
+        json[info['path'][:-9]] = score(path)
+        os.remove(path)
         print(json)
     return str(json)
 
@@ -50,6 +52,13 @@ def status():
 @route('/', method='GET')
 def getHome():
     return status()
+
+def save_image(based, extension):
+    imgdata = base64.b64decode(based)
+    filename = TMP_DIRECTORY + '/' + imgdata[:-9] + extension
+    with open(filename, 'wb') as f:
+        f.write(imgdata)
+    return filename
 
 def download_image(url, extension):
     filename = TMP_DIRECTORY + '/' + uuid.uuid4().hex + extension
