@@ -10,7 +10,23 @@ TMP_DIRECTORY = "tmp"
 TRAINED_LABELS = "%s/retrained_labels.txt" % (WORKING_DIRECTORY)
 RETRAINED_GRAPH = "%s/retrained_graph.pb" % (WORKING_DIRECTORY)
 
+data = []
+input_height = 299
+input_width = 299
+input_mean = 0
+input_std = 255
+
 #app = Flask(__name__)
+
+def load_graph(model_file):
+    graph = tf.Graph()
+    graph_def = tf.GraphDef()
+
+    with open(model_file, "rb") as f:
+        graph_def.ParseFromString(f.read())
+    with graph.as_default():
+        tf.import_graph_def(graph_def)
+    return graph
 
 @route('/classify_image/', method='POST')
 def index():
@@ -26,8 +42,6 @@ def index():
             os.remove(path)
         print(json)
     return str(json)
-
-
 
 @route('/status/', method='GET')
 def status():
@@ -49,24 +63,14 @@ def create_tmp(path):
         if exception.errno != errno.EEXIST:
             raise
 
-def load_graph(model_file):
-    graph = tf.Graph()
-    graph_def = tf.GraphDef()
-
-    with open(model_file, "rb") as f:
-        graph_def.ParseFromString(f.read())
-    with graph.as_default():
-        tf.import_graph_def(graph_def)
-    return graph
-
 def read_tensor_from_image_file(file_name,
                                 input_height=299,
                                 input_width=299,
                                 input_mean=0,
                                 input_std=255):
     input_name = "file_reader"
-    output_name = "normalized"
     file_reader = tf.read_file(file_name, input_name)
+    '''
     if file_name.endswith(".png"):
         image_reader = tf.image.decode_png(
             file_reader, channels=3, name="png_reader")
@@ -78,13 +82,14 @@ def read_tensor_from_image_file(file_name,
     else:
         image_reader = tf.image.decode_jpeg(
             file_reader, channels=3, name="jpeg_reader")
+    '''
+    image_reader = tf.image.decode_jpeg(file_reader, channels=3, name="jpeg_reader")
     float_caster = tf.cast(image_reader, tf.float32)
     dims_expander = tf.expand_dims(float_caster, 0)
     resized = tf.image.resize_bilinear(dims_expander, [input_height, input_width])
     normalized = tf.divide(tf.subtract(resized, [input_mean]), [input_std])
     sess = tf.Session()
     result = sess.run(normalized)
-
     return result
 
 def load_labels(label_file):
@@ -95,50 +100,12 @@ def load_labels(label_file):
     return label
 
 def score(image_path):
-    '''
-    image_data = tf.gfile.FastGFile(image_path, 'rb').read()
-    label_lines = [line.rstrip() for line
-                   in tf.gfile.GFile(TRAINED_LABELS)]
-    '''
-    data = []
-    input_height = 299
-    input_width = 299
-    input_mean = 0
-    input_std = 255
-
-    graph = load_graph(RETRAINED_GRAPH)
     t = read_tensor_from_image_file(
         image_path,
         input_height=input_height,
         input_width=input_width,
         input_mean=input_mean,
         input_std=input_std)
-
-    with tf.gfile.FastGFile(RETRAINED_GRAPH, 'rb') as f:
-        graph_def = tf.GraphDef()
-        graph_def.ParseFromString(f.read())
-        _ = tf.import_graph_def(graph_def, name='')
-
-    input_name = "import/" + "Placeholder"
-    output_name = "import/" + "final_result"
-    input_operation = graph.get_operation_by_name(input_name)
-    output_operation = graph.get_operation_by_name(output_name)
-
-    '''
-    with tf.Session() as sess:
-        softmax_tensor = sess.graph.get_tensor_by_name('final_result:0')
-        predictions = sess.run(softmax_tensor,
-                               {'DecodeJpeg/contents:0': image_data})
-
-        top_k = predictions[0].argsort()[-len(predictions[0]):][::-1]
-
-        for node_id in top_k:
-            human_string = label_lines[node_id]
-            score = predictions[0][node_id]
-            print('%s:%.5f' % (human_string, score))
-            data.append('%s:%.5f' % (human_string, score))
-        return data
-    '''
 
     with tf.Session(graph=graph) as sess:
         results = sess.run(output_operation.outputs[0], {
@@ -154,6 +121,12 @@ def score(image_path):
         score = results[i]
         data.append('%s:%.5f' % (human_string, score))
     return data
+
+graph = load_graph(RETRAINED_GRAPH)
+input_name = "import/" + "Placeholder"
+output_name = "import/" + "final_result"
+input_operation = graph.get_operation_by_name(input_name)
+output_operation = graph.get_operation_by_name(output_name)
 
 create_tmp('tmp')
 #run(host='127.0.0.1', port=8989, debug=True)
