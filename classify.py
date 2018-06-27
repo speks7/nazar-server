@@ -112,7 +112,7 @@ def score(image_path):
             input_operation.outputs[0]: t
         })
     results = np.squeeze(results)
-    top_k = results.argsort()[-5:][::-1]
+    top_k = results.argsort()[-1:][::-1]
     labels = load_labels(TRAINED_LABELS)
 
     for i in top_k:
