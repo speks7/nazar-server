@@ -16,7 +16,7 @@ input_height = 299
 input_width = 299
 input_mean = 0
 input_std = 255
-
+filer = uuid.uuid4().hex
 #app = Flask(__name__)
 
 def load_graph(model_file):
@@ -38,9 +38,9 @@ def index():
         if (info['type'] == 'local'):
             path = save_image(info['path'], info['ext'])
             #json[info['path']] = score(info['path'])
-        else:
-            path = download_image(info['path'], info['ext'])
-        json[info['path'][:-9]] = score(path)
+        '''else:
+            path = download_image(info['path'], info['ext'])'''
+        json[uuid.uuid4().hex[:5]] = score(path)
         os.remove(path)
         print(json)
     return str(json)
@@ -55,15 +55,17 @@ def getHome():
 
 def save_image(based, extension):
     imgdata = base64.b64decode(based)
-    filename = TMP_DIRECTORY + '/' + imgdata[:-9] + extension
+    filename = TMP_DIRECTORY + '/' + uuid.uuid4().hex + extension
     with open(filename, 'wb') as f:
         f.write(imgdata)
     return filename
 
+'''
 def download_image(url, extension):
     filename = TMP_DIRECTORY + '/' + uuid.uuid4().hex + extension
     urllib.request.urlretrieve(url, filename)
     return filename
+'''
 
 def create_tmp(path):
     try:
