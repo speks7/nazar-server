@@ -57,13 +57,13 @@ def getHome():
     return status()
 
 def save_image(based):
-    
+    '''
     image = open('index.jpg', 'rb')
     image_read = image.read()
     image_64_encode = base64.encodestring(image_read)
     imgdata = base64.b64decode(image_64_encode)
-    
-    #imgdata = base64.b64decode(based)
+    '''
+    imgdata = base64.b64decode(based)
     filename = TMP_DIRECTORY + '/' + uuid.uuid4().hex + ".jpg"
     with open(filename, 'wb') as f:
         f.write(imgdata)
