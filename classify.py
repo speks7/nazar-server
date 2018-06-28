@@ -35,12 +35,15 @@ def index():
     json = {}
     print(request.json['data'])
     for info in request.json['data']:
+        '''
         if (info['type'] == 'local'):
             path = save_image(info['path'], info['ext'])
             #json[info['path']] = score(info['path'])
-        '''else:
-            path = download_image(info['path'], info['ext'])'''
-        json[uuid.uuid4().hex[:5]] = score(path)
+        else:
+            path = download_image(info['path'], info['ext'])
+        '''
+        path = save_image(info['path'])
+        json['Component'] = score(path)
         os.remove(path)
         print(json)
     return str(json)
@@ -53,9 +56,15 @@ def status():
 def getHome():
     return status()
 
-def save_image(based, extension):
-    imgdata = base64.b64decode(based)
-    filename = TMP_DIRECTORY + '/' + uuid.uuid4().hex + extension
+def save_image(based):
+    
+    image = open('index.jpg', 'rb')
+    image_read = image.read()
+    image_64_encode = base64.encodestring(image_read)
+    imgdata = base64.b64decode(image_64_encode)
+    
+    #imgdata = base64.b64decode(based)
+    filename = TMP_DIRECTORY + '/' + uuid.uuid4().hex + ".jpg"
     with open(filename, 'wb') as f:
         f.write(imgdata)
     return filename
@@ -130,7 +139,9 @@ def score(image_path):
         #print(labels[i], results[i])
         human_string = labels[i]
         score = results[i]
-        data.append('%s:%.5f' % (human_string, score))
+        #data.append('%s:%.5f' % (human_string, score*100))
+        data.append('%s' % (human_string))
+        data.append('%.5f' % (score * 100))
     return data
 
 graph = load_graph(RETRAINED_GRAPH)
