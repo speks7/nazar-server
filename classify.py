@@ -11,7 +11,7 @@ TMP_DIRECTORY = "tmp"
 TRAINED_LABELS = "%s/retrained_labels.txt" % (WORKING_DIRECTORY)
 RETRAINED_GRAPH = "%s/retrained_graph.pb" % (WORKING_DIRECTORY)
 
-data = []
+#data = []
 input_height = 299
 input_width = 299
 input_mean = 0
@@ -33,7 +33,7 @@ def load_graph(model_file):
 def index():
     response.content_type='application/json'
     json = {}
-    #print(request.json['data'])
+    print(request.json['data'])
     for info in request.json['data']:
         '''
         if (info['type'] == 'local'):
@@ -135,7 +135,7 @@ def score(image_path):
     results = np.squeeze(results)
     top_k = results.argsort()[-1:][::-1]
     labels = load_labels(TRAINED_LABELS)
-
+    data =[]
     for i in top_k:
         #print(labels[i], results[i])
         human_string = labels[i]
