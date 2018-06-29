@@ -33,7 +33,7 @@ def load_graph(model_file):
 def index():
     response.content_type='application/json'
     json = {}
-    print(request.json['data'])
+    #print(request.json['data'])
     for info in request.json['data']:
         '''
         if (info['type'] == 'local'):
@@ -42,10 +42,9 @@ def index():
         else:
             path = download_image(info['path'], info['ext'])
         '''
-        path = save_image(info['path'])
+        path = save_image(info['image64'])
         json['Component'] = score(path)
         os.remove(path)
-        print(json)
     return str(json)
 
 @route('/status/', method='GET')
@@ -63,8 +62,10 @@ def save_image(based):
     image_64_encode = base64.encodestring(image_read)
     imgdata = base64.b64decode(image_64_encode)
     '''
-    imgdata = base64.b64decode(based)
-    filename = TMP_DIRECTORY + '/' + uuid.uuid4().hex + ".jpg"
+    based += "=" * ((4 - len(based) % 4) % 4) # add extra padding
+    extension = based.split(";")[0].split("/")[1] 
+    imgdata = base64.b64decode(based.split(",")[1])
+    filename = "{}/{}.{}".format(TMP_DIRECTORY,uuid.uuid4(),extension);
     with open(filename, 'wb') as f:
         f.write(imgdata)
     return filename
