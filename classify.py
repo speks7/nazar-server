@@ -45,9 +45,9 @@ def index():
         '''
         path = save_image(info['image64'])
         json = score(path)
-        ident = [{ "Component": json[0], "Predictions": json[1] }]
+        ident = { "Component": json[0], "Predictions": json[1] }
         os.remove(path)
-    return dict(value=ident)
+    return dict(ident)
 
 @route('/status/', method='GET')
 def status():
