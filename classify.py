@@ -45,7 +45,7 @@ def index():
         path = save_image(info['image64'])
         json['Component'] = score(path)
         os.remove(path)
-    return str(json)
+    return (json)
 
 @route('/status/', method='GET')
 def status():
