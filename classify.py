@@ -4,6 +4,7 @@ import sys, os, errno, urllib, uuid
 import numpy as np
 import urllib.request
 import base64
+from json import dumps
 #from flask import Flask
 
 WORKING_DIRECTORY = "tf_files"
@@ -32,7 +33,7 @@ def load_graph(model_file):
 @route('/classify_image/', method='POST')
 def index():
     response.content_type='application/json'
-    json = {}
+    #json = []
     print(request.json['data'])
     for info in request.json['data']:
         '''
@@ -43,9 +44,10 @@ def index():
             path = download_image(info['path'], info['ext'])
         '''
         path = save_image(info['image64'])
-        json['Component'] = score(path)
+        json = score(path)
+        ident = [{ "Component": json[0], "Predictions": json[1] }]
         os.remove(path)
-    return (json)
+    return dict(value=ident)
 
 @route('/status/', method='GET')
 def status():
