@@ -69,7 +69,7 @@ RETRAINED_GRAPH="%s/retrained_graph.pb" % (WORKING_DIRECTORY)
 Then all is done just run `sh train_data.sh`
 
 You will see something like that : 
-![](https://image.prntscr.com/image/za9C8v1cRIChS8UdzyOnug.png)
+![https://i.imgur.com/HxzXqz7.png](https://i.imgur.com/HxzXqz7.png)
 And the end output is something like this :
 ```
 INFO:tensorflow:Final test accuracy = 92.31% (N=1000)
