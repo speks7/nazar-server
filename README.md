@@ -1,15 +1,26 @@
-# nazar-server
-Tensorflow image classifier with a rest api server to fetch the response from the picture taken using Nazar Application
+# <p align="center"> Nazer-server </p>
+<p align="center">
+  <img alt="icon" src="https://i.imgur.com/dcLEEIn.png" width="120" height="120"> 
+</p>
+<p align="center">Electronic component detection system server for: <a href="https://github.com/aryaminus/nazar" target="_blank">Nazar App</a>
+</p>
 
 ## Description
+Tensorflow image classifier with a rest api server to fetch the response from the picture taken using Nazar Application (but lacks HTML UI and only response fetch)
 
 You can use the repository to train yaour dataset using the script and then use the classify.py file to classify the images.
 
 ## Installation 
 
-- You need to clone this repo `git clone https://github.com/aryaminus/nazar-server/`
-- Then `cd nazar-server`
-- Next you need to install all dependencies of this project hopefully just run this command `pip install -r requirements.txt`
+Clone the source locally:
+```
+$ git clone https://github.com/aryaminus/nazar-server/
+$ cd nazar
+```
+**Install all dependencies of this project**
+```
+$ pip install -r requirements.txt
+```
 
 You are okay to execute python script now !
 
@@ -107,3 +118,11 @@ curl -POST -H "Content-type: application/json" -d
 ```
 
 **where the given image64 has extra layer of  `base_64_encoded_text`**
+
+## Contributing
+
+1. Fork it (<https://github.com/aryaminus/nazar-server/fork>)
+2. Create your feature branch (`git checkout -b feature/fooBar`)
+3. Commit your changes (`git commit -am 'Add some fooBar'`)
+4. Push to the branch (`git push origin feature/fooBar`)
+5. Create a new Pull Request
