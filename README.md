@@ -79,32 +79,30 @@ Converted 2 variables to const ops.
 ## Classify an image
 
 To classify an image you need to run `python classify.py` in background (with systemctl for instance or screen).
-Then to check if you have access to the api just do `curl http://localhost:8989/status/`.
+Then to check if you have access to the api just do `curl http://0.0.0.:8080/status/`.
 
-To check a local image just run :
-
-```curl
-curl -POST -H "Content-type: application/json" -d 
-'{
-  "data": [{
-    "ext" : "jpg",
-    "path" : "index.jpg",
-    "type" : "local"
-  }]
-}'
-'localhost:8989/classify_image/'
-```
-
-To check a http image just run :
+To check from local server type in terminal :
 
 ```curl
 curl -POST -H "Content-type: application/json" -d 
 '{
   "data": [{
-    "ext" : "jpg",
-    "path" : "http://somedomains.come/somwhere/image.jpg",
-    "type" : "url"
+    "image64" : "base_64_encoded_textbase_64_encoded_text"
   }]
 }'
-'localhost:8989/classify_image/'
+'0.0.0.0:8080/classify_image/'
 ```
+
+To check from the heroku server type in terminal :
+
+```curl
+curl -POST -H "Content-type: application/json" -d 
+'{
+  "data": [{
+    "image64" : "data:image/png;base64,base_64_encoded_text"
+  }]
+}'
+'nazar-server.herokuapp.com/classify_image/'
+```
+
+**where the given image64 has extra layer of  `base_64_encoded_text`**
