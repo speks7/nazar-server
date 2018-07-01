@@ -1,4 +1,4 @@
-# <p align="center"> Nazer-server </p>
+# <p align="center"> Nazar-server </p>
 <p align="center">
   <img alt="icon" src="https://i.imgur.com/dcLEEIn.png" width="120" height="120"> 
 </p>
@@ -116,8 +116,11 @@ curl -POST -H "Content-type: application/json" -d
 }'
 'nazar-server.herokuapp.com/classify_image/'
 ```
+<p align="center">
+  <img src="https://i.imgur.com/LjIUUSF.png"> 
+</p>
 
-**where the given image64 has extra layer of  `base_64_encoded_text`**
+**where the given image64 has extra layer of `data:image/png;base64,` for  `base_64_encoded_text`**
 
 ## Contributing
 
