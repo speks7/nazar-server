@@ -13,7 +13,7 @@ You can use the repository to train yaour dataset using the script and then use 
 
 You are okay to execute python script now !
 
-## Train a data set ! 
+## Training (optional)
 
 By default, where you have cloned the repository you have a tf_files/data. This is where the magic begins, you need to gather enough image to create a dataset of several collections. 
 Yes you can not do just one dataset.
@@ -40,7 +40,7 @@ You should have something like that :
 └── train_data.sh
 ```
 
-If you have already some dataset to another folder you can edit variable in the training.sh :
+If you have already some dataset to another folder you can edit variable in the train_data.sh :
 
 ```sh
 WORKING_DIR="tf_files"
@@ -51,6 +51,7 @@ MODEL_DIR="$WORKING_DIR/inception"
 OUTPUT_GRAPH="$WORKING_DIR/retrained_graph.pb"
 OUTPUT_LABELS="$WORKING_DIR/retrained_labels.txt"
 DATA_FOLDER="$WORKING_DIR/data"
+SUM_FOLDER="$WORKING_DIR/retrain_logs"
 ...
 ```
 
@@ -65,7 +66,7 @@ RETRAINED_GRAPH="%s/retrained_graph.pb" % (WORKING_DIRECTORY)
 ...
 ```
 
-Then all is done just run `sh train.sh`
+Then all is done just run `sh train_data.sh`
 
 You will see something like that : 
 ![](https://image.prntscr.com/image/za9C8v1cRIChS8UdzyOnug.png)
