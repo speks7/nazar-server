@@ -132,17 +132,18 @@ def index():
         args = [
             ('q', jsonF[0]),
             ('include', 'short_description'),
-            ('start', '0'),
+            ('start', 0),
             ('limit', 1)
         ]
         url += '&' + urllib.parse.urlencode(args)
 
         data = urllib.request.urlopen(url).read().decode()
         searchResponse = json.loads(data)
+        print (searchResponse)
         octoList = []
         for item in searchResponse['results']:
             octoList.append(Octopart(item['item']))
-        maxPages = math.ceil(searchResponse['hits'] / 1)
+        maxPages = math.ceil(searchResponse['hits'] / 10)
 
         octoList.append(maxPages)
         print(octoList)
