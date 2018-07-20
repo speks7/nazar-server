@@ -1,10 +1,20 @@
-from bottle import request, response, route, run
-import tensorflow as tf
-import sys, os, errno, urllib, uuid
-import numpy as np
-import urllib.request
 import base64
-from json import dumps
+import errno
+#from json import dumps
+import json
+import math
+import os
+import sys
+import urllib
+import urllib.parse
+import urllib.request
+import urllib.response
+import uuid
+
+import numpy as np
+import tensorflow as tf
+from bottle import request, response, route, run
+
 #from flask import Flask
 
 WORKING_DIRECTORY = "tf_files"
@@ -30,6 +40,75 @@ def load_graph(model_file):
         tf.import_graph_def(graph_def)
     return graph
 
+class Octopart:
+    """
+    Class to contain the Octopart data without saving a Json string
+    """
+    def __init__(self, jsonStream):
+        """
+        Octopart init. Takes a dict representing a single Octopart item and converts it to an Octopart()
+        :param jsonStream: Dict returned from an Octosearch
+        :type jsonStream: dict
+        """
+        self.uid = jsonStream['uid']
+        self.mpn = jsonStream['mpn']
+        self.brandName = jsonStream['brand']['name']
+        self.manufacturer = jsonStream['manufacturer']['name']
+        self.octopartUrl = jsonStream['octopart_url']
+        self.shortDescription = jsonStream['short_description']
+        self.quantity = 0
+
+    def getTechSpecs(self, apiKey, images=False, description=False, datasheets=False):
+        """
+        Performs a part-match with Octopart and includes the tech specs. Adds the tech specs to the Octopart
+        :param apiKey: API key from config file
+        :type apiKey: str
+        :param images: Boolean on whether or not to include images
+        :type images: bool
+        :param description: Boolean on whether or not to include long descriptions
+        :type description: bool
+        :param datasheets: Boolean on whether or not to include datasheet downloads
+        :type datasheets: bool
+        """
+        # To do: add auto datasheet download and images and description
+        url = 'http://octopart.com/api/v3/parts/'
+        url += self.uid
+        url += '?apikey='
+        url += "6aa164d3"
+        url += '&include[]=specs'
+        if images:
+            url += '&include[]=imagesets'
+        if description:
+            url += '&include[]=descriptions'
+        if datasheets:
+            url += '&include[]=datasheets'
+
+        data = json.loads(urllib.request.urlopen(url).read().decode())
+        if data['datasheets']:
+            if len(data['datasheets']) > 1:
+                urlString = data['datasheets'][1]['url']
+                urlArray = urlString.rpartition('/')
+                fileName = urlArray[len(urlArray) - 1]
+                fileName = os.path.join('datasheets/', fileName)
+                self.dataFile = fileName
+                self.dataURL = urlString
+
+        specJson = data['specs']
+        specArray = []
+        for specName in specJson:
+            tmpSpec = specJson[specName]
+            name = tmpSpec['metadata']['name']
+            value = tmpSpec['display_value']
+            specArray.append([name, value])
+
+        descArray = []
+        if data['descriptions']:
+            for i in range(0, len(data['descriptions'])):
+                descArray.append(data['descriptions'][i]['value'])
+
+        self.specs = specArray
+        self.descriptions = descArray
+
 @route('/classify_image/', method='POST')
 def index():
     response.content_type='application/json'
@@ -44,8 +123,31 @@ def index():
             path = download_image(info['path'], info['ext'])
         '''
         path = save_image(info['image64'])
-        json = score(path)
-        ident = { "Component": json[0], "Predictions": json[1] }
+        jsonF = score(path)
+
+        # Octopart API
+        url = "http://octopart.com/api/v3/parts/search"
+        url += "?apikey="
+        url += "6aa164d3"
+        args = [
+            ('q', jsonF[0]),
+            ('include', 'short_description'),
+            ('start', '0'),
+            ('limit', 1)
+        ]
+        url += '&' + urllib.parse.urlencode(args)
+
+        data = urllib.request.urlopen(url).read().decode()
+        searchResponse = json.loads(data)
+        octoList = []
+        for item in searchResponse['results']:
+            octoList.append(Octopart(item['item']))
+        maxPages = math.ceil(searchResponse['hits'] / 1)
+
+        octoList.append(maxPages)
+        print(octoList)
+        #ident = { "Component": jsonF[0], "Predictions": jsonF[1], "Info": octoList }
+        ident = { "Component": jsonF[0], "Predictions": jsonF[1] }
         os.remove(path)
     return dict(ident)
 
@@ -67,7 +169,7 @@ def save_image(based):
     based += "=" * ((4 - len(based) % 4) % 4) # add extra padding
     extension = based.split(";")[0].split("/")[1] 
     imgdata = base64.b64decode(based.split(",")[1])
-    filename = "{}/{}.{}".format(TMP_DIRECTORY,uuid.uuid4(),extension);
+    filename = "{}/{}.{}".format(TMP_DIRECTORY,uuid.uuid4(),extension)
     with open(filename, 'wb') as f:
         f.write(imgdata)
     return filename
