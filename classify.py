@@ -139,16 +139,17 @@ def index():
 
         data = urllib.request.urlopen(url).read().decode()
         searchResponse = json.loads(data)
-        print (searchResponse)
-        octoList = []
         for item in searchResponse['results']:
-            octoList.append(Octopart(item['item']))
-        maxPages = math.ceil(searchResponse['hits'] / 10)
-
-        octoList.append(maxPages)
-        print(octoList)
+            jsonStream = item['item']
+        
+        uid = jsonStream['uid']
+        brandName = jsonStream['brand']['name']
+        manufacturer = jsonStream['manufacturer']['name']
+        octopartUrl = jsonStream['octopart_url']
+        shortDescription = jsonStream['short_description']
+        print(jsonStream['uid'])
         #ident = { "Component": jsonF[0], "Predictions": jsonF[1], "Info": octoList }
-        ident = { "Component": jsonF[0], "Predictions": jsonF[1] }
+        ident = { "Component": jsonF[0], "Predictions": jsonF[1], "Info": shortDescription }
         os.remove(path)
     return dict(ident)
 
