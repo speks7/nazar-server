@@ -87,11 +87,10 @@ def index():
         url2 += '&include[]=specs'
         url2 += '&include[]=imagesets'
         url2 += '&include[]=descriptions'
-        data2 = json.loads(urllib.request.urlopen(url).read().decode())
+        data2 = json.loads(urllib.request.urlopen(url2).read().decode())
 
         specJson = data2['specs']
         specArray = []
-
         for specName in specJson:
             tmpSpec = specJson[specName]
             name = tmpSpec['metadata']['name']
@@ -99,15 +98,15 @@ def index():
             specArray.append([name, value])
 
         descArray = []
-        if data['descriptions']:
-            for i in range(0, len(data['descriptions'])):
-                descArray.append(data['descriptions'][i]['value'])
+        if data2['descriptions']:
+            for i in range(0, len(data2['descriptions'])):
+                descArray.append(data2['descriptions'][i]['value'])
 
         specs = specArray
         descriptions = descArray
 
-        #ident = { "Component": jsonF[0], "Predictions": jsonF[1], "Info": octoList }
-        ident = { "Component": jsonF[0], "Predictions": jsonF[1], "ShortInfo": shortDescription, "octopartUrl": octopartUrl }
+        #print(data2['imagesets'])
+        ident = { "Component": jsonF[0], "Predictions": jsonF[1], "ShortInfo": shortDescription, "octopartUrl": octopartUrl, "brandName": brandName, "manufacturer": manufacturer, "specs": specs, "descriptions": descriptions }
         os.remove(path)
     return dict(ident)
 
