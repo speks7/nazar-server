@@ -2,7 +2,6 @@ bypass capacitor
 electrolytic capacitor
 integrated micro circuit
 led
-oled
 pnp transistor
 anode
 armature
@@ -10,8 +9,6 @@ astatic coil
 attenuator
 cartridge fuse
 clip lead
-conducting wire
-dipole antenna
 electric relay
 field effect transistor
 filament
@@ -35,7 +32,6 @@ opamp ic
 plug fuse
 potential divider
 potentiometer
-printed circuit
 pulse generator
 pulse timing circuit
 relay
