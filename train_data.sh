@@ -9,7 +9,7 @@ OUTPUT_LABELS="$WORKING_DIR/retrained_labels.txt"
 DATA_FOLDER="$WORKING_DIR/data"
 SUM_FOLDER="$WORKING_DIR/retrain_logs"
 
-python retrain.py \
+python train.py \
 --bottleneck_dir=$BOTTLENECK_DIR  \
 --how_many_training_steps $STEPS \
 --saved_model_dir=$MODEL_DIR \

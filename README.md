@@ -8,7 +8,7 @@
 ## Description
 Tensorflow image classifier with a rest api server to fetch the response from the picture taken using Nazar Application (but lacks HTML UI and only response fetch)
 
-You can use the repository to train yaour dataset using the script and then use the classify.py file to classify the images.
+You can use the repository to train yaour dataset using the script and then use the classify.py file to classify the images along with fetching Octopart descriptions for identified components.
 
 ## Installation 
 
