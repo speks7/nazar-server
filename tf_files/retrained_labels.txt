@@ -3,37 +3,27 @@ electrolytic capacitor
 integrated micro circuit
 led
 pnp transistor
-anode
 armature
-astatic coil
 attenuator
 cartridge fuse
 clip lead
 electric relay
-field effect transistor
 filament
 heat sink
-high pass filter
 induction coil
-inductor
 jumper cable
 junction transistor
-lead in
 light circuit
 limiter clipper
 local oscillator
-low pass filter
 memory chip
 microchip
 microprocessor
 multiplexer
 omni directional antenna
-opamp ic
-plug fuse
 potential divider
 potentiometer
 pulse generator
-pulse timing circuit
 relay
 rheostat
 semi conductor
