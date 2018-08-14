@@ -108,6 +108,7 @@ def index():
         #print(data2['imagesets'])
         ident = { "Component": jsonF[0], "Predictions": jsonF[1], "ShortInfo": shortDescription, "octopartUrl": octopartUrl, "brandName": brandName, "manufacturer": manufacturer, "specs": specs, "descriptions": descriptions }
         os.remove(path)
+        print (ident)
     return dict(ident)
 
 @route('/status/', method='GET')
